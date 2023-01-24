@@ -1,0 +1,70 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{physics}
+\usepackage{forest}
+\usepackage{tikz}
+
+\captionsetup{width=0.8 \linewidth}
+
+\usepackage[left=2.5cm,top=1cm,right=2.5cm,bottom=2.5cm]{geometry}
+
+\usepackage{parskip}
+\usepackage{hyperref}
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+\title{Information Theory for Complex Systems \\ \Large{Homework 1}}
+\author{Vincent Udén\\udenv@student.chalmers.se}
+\date{Januari - 2023}
+
+\maketitle
+
+Below follows my solution for determining the optimal order of attributes using the ID3 algorithm implemented in Python. Before running any code I santised the csv file manually to remove trailing and leading whitespace. The code is attached at the end of the report and is availible on \href{https://github.com/vincent-uden/tif150-information-theory-for-complex-systems}{https://github.com/vincent-uden/tif150-information-theory-for-complex-systems}.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{forest} for tree={inner sep=5pt, l=40pt, l sep=40pt, s sep=40pt}
+        [Body Temperature?
+            [Mode of transport?, edge label={node[midway,fill=white,font=\scriptsize]{> 38}}
+                [Home, edge label={node[midway,fill=white,font=\scriptsize]{Public}}]
+                [Office, edge label={node[midway,fill=white,font=\scriptsize]{Private}}]
+            ]
+            [Sense of taste?, edge label={node[midway,fill=white,font=\scriptsize]{37 - 38}}
+                [Home, edge label={node[midway,fill=white,font=\scriptsize]{Abnormal}}]
+                [Office, edge label={node[midway,fill=white,font=\scriptsize]{Normal}}]
+            ]
+            [Home, edge label={node[midway,fill=white,font=\scriptsize]{> 38}}]
+        ]
+    \end{forest}
+    \caption{The sequence of optimal attributes for separating individuals working from home or at the office.}
+    \label{fig:attr}
+\end{figure}
+
+Figure \ref{fig:attr} shows the optimal attribute order which maximises the information gained at each observation. It also shows the values of the chosen attributes along the edges of the tree. Entropy values are presented below in table \ref{table:entropy}.
+
+\begin{table}[ht!]
+    \centering
+    \caption{Shannon entropy at progressing stages of the ID3 algorithm.} \label{table:entropy}
+    \begin{tabular}{|l r r|}
+        \hline
+        Attribute choice            & $H(S|A)$ at the step & $H(t)$ after step \\
+        \hline
+        Start (before any choice)   & -                    & 4.39              \\
+        Body Temperature (> 38)     & 1.18                 & 1.65              \\
+        Body Temperature (37 -  38) & 1.18                 & 1.65              \\
+        Body Temperature (< 37)     & 1.18                 & 0.0               \\
+        Mode of tranport (Public)   & 0.0                  & 0.0               \\
+        Mode of tranport (Private)  & 0.0                  & 0.0               \\
+        Sense of taste (Abnormal)   & 0.0                  & 0.0               \\
+        Sense of taste (Normal)     & 0.0                  & 0.0               \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\end{document}

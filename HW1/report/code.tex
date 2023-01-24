@@ -1,0 +1,22 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage[top=.25in,bottom=.25in,left=.25in,right=.25in]{geometry}
+\usepackage[parfill]{parskip}
+\usepackage{courier}
+
+\usepackage{listings}
+\lstset{
+    frame=single,
+    breaklines=true,
+    basicstyle=\footnotesize\ttfamily
+}
+
+\begin{document}
+\pagenumbering{gobble}
+
+main.py
+\lstinputlisting{../code/main.py}
+\newpage
+
+\end{document}

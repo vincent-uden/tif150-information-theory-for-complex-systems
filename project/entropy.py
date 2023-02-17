@@ -14,6 +14,12 @@ from tqdm import trange
 #
 # Therefore this file does an entropy calculation over the entire binary data
 # of the image.
+#
+# How does the fact that the image is finite affect the entropy results???
+#   For the random image, it's block entropy should always be 8 bits per symbol
+#   if it was infinite. It deviates from this at 3 bytes block length, since
+#   there are less combinations availible for storage in the image than there
+#   are possible 3-byte combinations: (512*512*3=786432, 256*256*256=16777216)
 
 def binary_data(path: Path) -> np.ndarray:
     f_bytes = np.fromfile(path, dtype="uint8")
@@ -25,7 +31,6 @@ def bits_to_int(bits: np.ndarray) -> int:
     return bits @ a
 
 def S_m(data: np.ndarray, m: int) -> float:
-
     count = np.zeros((2**m))
     for i in range(data.shape[0]-m):
         seq = data[i:i+m]
@@ -33,17 +38,15 @@ def S_m(data: np.ndarray, m: int) -> float:
 
     total = np.sum(count)
     p = count / total
-    print(total)
 
     return np.sum( p * np.log2(1.0/p) )
 
 def S_m_bytes(data: np.ndarray, m: int) -> float:
-
     total = 0
     patterns = defaultdict(lambda: 0)
     for i in range(len(data)-m):
         seq = data[i:i+m]
-        patterns[seq] += 1
+        patterns[tuple(seq)] += 1
         total += 1
 
     entropy = 0
@@ -53,21 +56,43 @@ def S_m_bytes(data: np.ndarray, m: int) -> float:
 
     return entropy
 
+def load_raw_file(path: Path):
+    r_bytes = np.fromfile(str(path) + ".red", dtype="uint8")
+    g_bytes = np.fromfile(str(path) + ".grn", dtype="uint8")
+    b_bytes = np.fromfile(str(path) + ".blu", dtype="uint8")
+
+    combined = np.zeros((r_bytes.shape[0]*3), dtype="uint8")
+    for i, (r,g,b) in enumerate(zip(r_bytes,g_bytes,b_bytes)):
+        combined[i*3] = r
+        combined[i*3+1] = g
+        combined[i*3+2] = b
+
+    return combined
+
 
 def file_entropy(path: Path):
     return
 
 if __name__ == "__main__":
-    png_path = Path("./dest_imgs/baboon.png")
+    paths = [
+        Path("./dest_imgs/baboon.raw"),
+        Path("./dest_imgs/baboon.png"),
+        Path("./dest_imgs/baboon.jpeg"),
+        Path("./dest_imgs/baboon.webp"),
+        Path("./src_imgs/baboon.tiff"),
+    ]
+    for p in paths:
+        print(p)
+        if p.suffix == ".raw":
+            data = load_raw_file(p)
+        else:
+            data = np.fromfile(p, dtype="uint8")
 
-    data = np.fromfile(png_path, dtype="uint8")
-    char_seq = str([ chr(i) for i in data ])
+        M = 30
+        entropies = np.zeros(M)
+        for m in trange(1,M+1):
+            entropies[m-1] = S_m_bytes(data, m) / m
 
-    M = 30
-    entropies = np.zeros(M)
-    for m in trange(1,M+1):
-        entropies[m-1] = S_m_bytes(char_seq, m) / m
+        print(entropies)
 
-    print(entropies)
-
-    np.save("output", entropies)
+        np.save(f"./entropy_results/{p.name}.npy", entropies)

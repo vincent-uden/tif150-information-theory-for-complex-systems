@@ -5,6 +5,8 @@ from pathlib import Path
 
 from tqdm import trange
 
+from plot_entropies import plot
+
 
 # One angle would be to consider only the image data for the entropy
 # calculation. Different formats contain differing amounts of redundant
@@ -74,25 +76,45 @@ def file_entropy(path: Path):
     return
 
 if __name__ == "__main__":
-    paths = [
-        Path("./dest_imgs/baboon.raw"),
-        Path("./dest_imgs/baboon.png"),
-        Path("./dest_imgs/baboon.jpeg"),
-        Path("./dest_imgs/baboon.webp"),
-        Path("./src_imgs/baboon.tiff"),
+    names = [
+        "baboon",
+        "airplane",
+        "peppers",
+        "random",
+        "sailboat_on_lake",
+        "white",
     ]
-    for p in paths:
-        print(p)
+    paths = []
+
+    for n in names:
+        paths.append(Path(f"./dest_imgs/{n}.png"))
+        paths.append(Path(f"./dest_imgs/{n}.jpeg"))
+        paths.append(Path(f"./dest_imgs/{n}.webp"))
+        paths.append(Path(f"./dest_imgs/{n}_lzw.tiff"))
+        paths.append(Path(f"./src_imgs/{n}.tiff"))
+
+
+    exists = list(map(lambda x: x.exists(), paths))
+    for item in list(zip(paths,exists)):
+        print(item)
+
+    assert all(exists)
+
+    t = trange(len(paths), desc="")
+    for i in t:
+        p = paths[i]
+        t.set_description(f"{p.name}")
         if p.suffix == ".raw":
             data = load_raw_file(p)
         else:
             data = np.fromfile(p, dtype="uint8")
 
-        M = 30
+        M = 10
         entropies = np.zeros(M)
-        for m in trange(1,M+1):
+        for m in range(1,M+1):
             entropies[m-1] = S_m_bytes(data, m) / m
 
-        print(entropies)
-
         np.save(f"./entropy_results/{p.name}.npy", entropies)
+
+    for n in names:
+        plot(n)

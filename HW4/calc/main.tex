@@ -1,0 +1,59 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{parskip}
+
+\usepackage{physics}
+\usepackage{amsmath}
+
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usepackage{tikzscale}
+\usetikzlibrary{arrows}
+
+\captionsetup{width=0.8 \linewidth}
+
+\begin{document}
+
+\title{\vspace{-6em}\textbf{Homework 4}\\ \Large Information Theory for Complex Systems \vspace{-3.2em} }
+\author{}
+\date{Februari - 2023}
+
+\maketitle
+
+There are 9 possible probabilities, which through symmetries can be reduced down 4.
+\begin{center}
+    \begin{tabular}{c|c|c|c}
+         & A & B & C \\ \hline
+        A & $P(AA) = p_1$ & $P(AB) = p_2$ & $P(AC) = p_2$ \\ \hline
+        B & $P(BA) = p_3$ & $P(BB) = p_4$ & $P(BC) = p_4$ \\ \hline
+        C & $P(CA) = p_3$ & $P(CB) = p_4$ & $P(CC) = p_4$ \\
+    \end{tabular}
+\end{center}
+Since energy is only determined by interactions in pairs we can conclude that finding a maximum of $\Delta S_2$ should be enough to determine $p_1,p_2,p_3$ and $p_4$.
+
+Attempt a Lagrange optimization
+\begin{equation}
+    \begin{split}
+        L(p_1, p_2, p_3, p_4, \beta, \mu) = \Delta S_2 & + \beta ( u - J(2p_2 + 2p_3 - p_1))  \\
+        & + \mu ( 1 - p_1 - 2 p_2 -  2p_3 - 4 p_4 )
+    \end{split}
+\end{equation}
+
+(is  $p_3 = p_2$ ?)
+
+
+\noindent\rule{\textwidth}{0.4pt}
+
+$U$ is the expectation value of the internal energy.
+\begin{gather}
+    S[P] = \sum_i p_i \ln \frac{1}{p_i} \\
+    \sum_i p_i h(i) = U \\
+    \sum_i p_i f_k(i) = n_k, (k = 1, \dots , M) \\
+    \sum_i p_i = 1
+\end{gather}
+
+\end{document}

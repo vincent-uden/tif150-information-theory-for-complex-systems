@@ -24,6 +24,8 @@
 
 \maketitle
 
+\pagenumbering{gobble}
+
 There are 9 possible probabilities, which through symmetries can be reduced down 3.
 \begin{center}
     \begin{tabular}{c|c|c|c}
@@ -42,20 +44,10 @@ Attempt a Lagrange optimization
         & + \mu ( 1 - p_1 - 4 p_2 - 4 p_3 )
     \end{split}
 \end{equation}
-where we know everything except for an expression for the block entropy difference. To construct an expression for $\Delta S_2$ we need to know the probabilities of the spin states themselves
-\begin{equation}
-    P(A) = ?, P(B) = ?, P(C) = ?.
-\end{equation}
-Now we can calculate the block entropy difference
+where we know everything except for an expression for the block entropy difference. Now we can calculate the block entropy difference
 \begin{equation}
     \begin{array}{ll}
         \Delta S_2 & = \sum_{z_{n-1}} p(z_{n-1}) \sum_{z_n} p(z_n|z_{n-1}) \log \frac{1}{p(z_n|z_{n-1})} = \\
-        & = P(A) \left(P(AA) \log \frac{1}{P(AA)} + P(AB) \log \frac{1}{P(AB)} +P(AC) \log \frac{1}{P(AC)} \right) + \\
-        & + \hspace{.23em} P(B) \left(P(BA) \log \frac{1}{P(BA)} + P(BB) \log \frac{1}{P(BB)} +P(BC) \log \frac{1}{P(BC)} \right) +  \\
-        & + \hspace{.23em} P(C) \left(P(CA) \log \frac{1}{P(CA)} + P(CB) \log \frac{1}{P(CB)} +P(CC) \log \frac{1}{P(CC)} \right) = \\
-        & = - P(A) \left( p_1 \log p_1 + p_2 \log p_2 + p_2 \log p_2  \right) \\
-        & \hspace{1em} - P(B)  \left( p_2 \log p_2 + p_3 \log p_3 + p_3 \log p_3  \right) \\
-        & \hspace{1em} - P(C)  \left( p_2 \log p_2 + p_3 \log p_3 + p_3 \log p_3  \right) = \\
         & = - ( a p_1 \log p_1 + [2a + P(B) + P(C)] p_2 \log p_2  \\
         & \hspace{1em} + [2P(B) + 2P(C)] p_3 \log p_3 )
     \end{array}
@@ -68,16 +60,8 @@ Now we can simplifiy the block entropy further.
 \begin{equation}
     \Delta S_2 =  - \left( a p_1 \log p_1 + [a + 1] p_2 \log p_2 + 2 [ 1 - a] p_3 \log p_3 \right)
 \end{equation}
+To obtain the equilibrium distribution from here, complete the Lagrange optimization since all values except the parameters to be optimized for ($p_1, p_2, p_3$) are known.
 
-
-\noindent\rule{\textwidth}{0.4pt}
-
-$U$ is the expectation value of the internal energy.
-\begin{gather}
-    S[P] = \sum_i p_i \log \frac{1}{p_i} \\
-    \sum_i p_i h(i) = U \\
-    \sum_i p_i f_k(i) = n_k, (k = 1, \dots , M) \\
-    \sum_i p_i = 1
-\end{gather}
+In the limit of zero temperature, the energy of the system would be as low as possible. This entails pairing as many spins as possible to collect the maximum amount of $-J$ contributions. The chain would be organised in blocks, containing only one spin with some crystal imperfections where two blocks of differing spin meets. Described by the probabilities $p_2$ will tend towards 0 (but never quite reach it since there must be some imperfections unless $a=1$). $p_1$ would approach $a$ and in turn $p_3$ would approach $(1 - p_1)/2 = (1-a)/2$.
 
 \end{document}

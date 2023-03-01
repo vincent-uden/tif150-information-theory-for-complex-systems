@@ -24,33 +24,49 @@
 
 \maketitle
 
-There are 9 possible probabilities, which through symmetries can be reduced down 4.
+There are 9 possible probabilities, which through symmetries can be reduced down 3.
 \begin{center}
     \begin{tabular}{c|c|c|c}
          & A & B & C \\ \hline
         A & $P(AA) = p_1$ & $P(AB) = p_2$ & $P(AC) = p_2$ \\ \hline
-        B & $P(BA) = p_3$ & $P(BB) = p_4$ & $P(BC) = p_4$ \\ \hline
-        C & $P(CA) = p_3$ & $P(CB) = p_4$ & $P(CC) = p_4$ \\
+        B & $P(BA) = p_2$ & $P(BB) = p_3$ & $P(BC) = p_3$ \\ \hline
+        C & $P(CA) = p_2$ & $P(CB) = p_3$ & $P(CC) = p_3$ \\
     \end{tabular}
 \end{center}
-Since energy is only determined by interactions in pairs we can conclude that finding a maximum of $\Delta S_2$ should be enough to determine $p_1,p_2,p_3$ and $p_4$.
+Since energy is only determined by interactions in pairs we can conclude that finding a maximum of $\Delta S_2$ should be enough to determine $p_1,p_2$ and $p_3$.
 
 Attempt a Lagrange optimization
 \begin{equation}
     \begin{split}
-        L(p_1, p_2, p_3, p_4, \beta, \mu) = \Delta S_2 & + \beta ( u - J(2p_2 + 2p_3 - p_1))  \\
-        & + \mu ( 1 - p_1 - 2 p_2 -  2p_3 - 4 p_4 )
+        L(p_1, p_2, p_3, \beta, \mu) = \Delta S_2 & + \beta ( u - J(4p_2 - p_1))  \\
+        & + \mu ( 1 - p_1 - 4 p_2 - 4 p_3 )
     \end{split}
 \end{equation}
-
-(is  $p_3 = p_2$ ?)
+where we know everything except for an expression for the block entropy difference. To construct an expression for $\Delta S_2$ we need to know the probabilities of the spin states themselves
+\begin{equation}
+    P(A) = ?, P(B) = ?, P(C) = ?.
+\end{equation}
+Now we can calculate the block entropy difference
+\begin{equation}
+    \begin{array}{ll}
+        \Delta S_2 & = \sum_{z_{n-1}} p(z_{n-1}) \sum_{z_n} p(z_n|z_{n-1}) \log \frac{1}{p(z_n|z_{n-1})} = \\
+        & = P(A) \left(P(AA) \log \frac{1}{P(AA)} + P(AB) \log \frac{1}{P(AB)} +P(AC) \log \frac{1}{P(AC)} \right) + \\
+        & + \hspace{.23em} P(B) \left(P(BA) \log \frac{1}{P(BA)} + P(BB) \log \frac{1}{P(BB)} +P(BC) \log \frac{1}{P(BC)} \right) +  \\
+        & + \hspace{.23em} P(C) \left(P(CA) \log \frac{1}{P(CA)} + P(CB) \log \frac{1}{P(CB)} +P(CC) \log \frac{1}{P(CC)} \right) = \\
+        & = - P(A) \left( p_1 \log p_1 + p_2 \log p_2 + p_2 \log p_2  \right) \\
+        & \hspace{1em} - P(B)  \left( p_2 \log p_2 + p_3 \log p_3 + p_3 \log p_3  \right) \\
+        & \hspace{1em} - P(C)  \left( p_2 \log p_2 + p_3 \log p_3 + p_3 \log p_3  \right) = \\
+        & = - ( a p_1 \log p_1 + [2a + P(B) + P(C)] p_2 \log p_2  \\
+        & \hspace{1em} + [2P(B) + 2P(C)] p_3 \log p_3 )
+    \end{array}
+\end{equation}
 
 
 \noindent\rule{\textwidth}{0.4pt}
 
 $U$ is the expectation value of the internal energy.
 \begin{gather}
-    S[P] = \sum_i p_i \ln \frac{1}{p_i} \\
+    S[P] = \sum_i p_i \log \frac{1}{p_i} \\
     \sum_i p_i h(i) = U \\
     \sum_i p_i f_k(i) = n_k, (k = 1, \dots , M) \\
     \sum_i p_i = 1
